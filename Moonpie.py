@@ -3,36 +3,40 @@
 # Create Time: 9/18/21 23:09
 
 
-n, d = input().split()
-n = int(n)
-d = int(d)  # 需求总量
+N, D = input().split()
 
-k = 1000
-price = 0
 a = input().split()  # 月饼种类对应的数量
 b = input().split()  # 月饼种类对应的总价
-length = len(a)
-for l in range(length - 1):
-    a[l] = float(a[l])
-    b[l] = float(b[l])
+m = [[0.00 for i in range(3)] for j in range(1000)]  # 三维数组用来存储月饼的存量与总价
 
-price = [0] * length
-priceU = [0] * length
-for i in range(length):
-    price[i] = float(b[i]) / float(a[i])
+for i in range(int(N)):
+    m[i][0] = int(a[i])
+    m[i][1] = int(b[i])
+    m[i][2] = float(b[i]) / float(a[i])
 
-price.sort(reverse=True)  # 对单价进行降序排序
-for i in range(length):
-    priceU[i] = price[i]
+m = sorted(m, key=(lambda x: x[2]), reverse=True)  # 对单价进行降序排序
 
-for i in range(length):
-    price[i] = float(b[i]) / float(a[i])
+Total = 0
+remain = int(D)
 
-for i in range(length):
-    for j in range(length):
-        if price[i] == priceU[j]:
-            Big = i
-remain = d - float(a[Big])
+for i in range(int(N)):
+    if int(D) <= int(m[0][0]):
+        Total = int(D) * m[0][0]
+    elif remain <= 0:
+        print(Total)
+    elif remain > m[i][0]:
+        remain = int(D) - m[i][0]
+        Total = Total + m[i][0] * m[i][2]
+        continue
+    elif remain <= m[i][0]:
+        Total = Total + remain * m[i][2]
+        break
+
+print('%.2f' % Total)
+
+
+
+
 
 
 
